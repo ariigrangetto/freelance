@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "skills": {
+    "general-video": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/general-video/SKILL.md",
+      "computedHash": "3dfc5966832f544b11a0b59a585161015eb3f67151b8cb9093ad4b415b2c0dc8"
+    },
+    "hyperframes": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes/SKILL.md",
+      "computedHash": "7ddbb928a3674e5e1821b13055e784f261edcd6ff9bf61e5f1fdffaab307a58b"
+    },
+    "hyperframes-animation": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-animation/SKILL.md",
+      "computedHash": "0054da496e1de0bedf44d244bef963c6fc1a7d8ae9a0ced7919c9d983dee30e2"
+    },
+    "hyperframes-cli": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-cli/SKILL.md",
+      "computedHash": "b76dda34c940480c64a5c817379900fb387c7b896ca0c8fd62a6bb340c127a33"
+    },
+    "hyperframes-core": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-core/SKILL.md",
+      "computedHash": "54079d56e96fb751727f356568859288706d29c569fee7606f51d8b22fdf925b"
+    },
+    "hyperframes-creative": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-creative/SKILL.md",
+      "computedHash": "bff726d39ae4d9672a7b30d5e9e8a9a2492f0858b1d6f3c7228c2fd9f1a31881"
+    },
+    "hyperframes-registry": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/hyperframes-registry/SKILL.md",
+      "computedHash": "7061c9980e85519280d3fa3bb871eaa5f6dcad9300a521945dc3fa468df42412"
+    },
+    "media-use": {
+      "source": "heygen-com/hyperframes",
+      "sourceType": "github",
+      "skillPath": "skills/media-use/SKILL.md",
+      "computedHash": "d013cc91bfa7e5e66067724bc93096a9d2c98ee01f347f795cee9459651d8208"
+    }
+  }
+}

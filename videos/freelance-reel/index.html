@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Freelance Launch - Instagram Reel</title>
+    <script src="./assets/gsap.min.js"></script>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html, body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #ffffff;
+        font-family: 'Inter', system-ui, sans-serif;
+        color: #1c1c2e;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #ffffff;
+      }
+
+      /* Canvas Background & Grid */
+      .canvas-bg {
+        position: absolute;
+        inset: 0;
+        background-color: #ffffff;
+        background-image: radial-gradient(circle at center, rgba(28, 28, 46, 0.12) 1.5px, transparent 1.6px);
+        background-size: 24px 24px;
+        z-index: 0;
+      }
+
+      /* Floating Abstract Shapes */
+      .floating-shape {
+        position: absolute;
+        z-index: 1;
+        transform-origin: center center;
+      }
+      .shape-amber-circle {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background-color: #e8a020;
+        top: 140px;
+        right: 80px;
+      }
+      .shape-teal-sq {
+        width: 100px;
+        height: 100px;
+        border-radius: 20px;
+        background-color: #3dbfb8;
+        top: 650px;
+        left: 60px;
+        transform: rotate(18deg);
+      }
+      .shape-navy-dot {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        background-color: #1c1c2e;
+        top: 1100px;
+        right: 120px;
+      }
+      .shape-amber-ring {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        border: 12px solid #e8a020;
+        bottom: 220px;
+        left: 100px;
+      }
+
+      /* Shared Top Brand Header (Persistent) */
+      .brand-header {
+        position: absolute;
+        top: 90px;
+        left: 70px;
+        right: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 20;
+      }
+      .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .brand-avatar {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: #1c1c2e;
+        color: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 26px;
+      }
+      .brand-name {
+        font-size: 30px;
+        letter-spacing: 0.05em;
+        font-weight: 600;
+        color: #1c1c2e;
+      }
+      .availability-badge {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 26px;
+        border-radius: 100px;
+        background: rgba(28, 28, 46, 0.06);
+        border: 1.5px solid rgba(28, 28, 46, 0.15);
+        font-size: 20px;
+        color: #1c1c2e;
+        font-weight: 600;
+      }
+      .pulse-dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background-color: #c5881b;
+      }
+
+      /* Clip Base: Centered Vertically in Screen */
+      .clip {
+        position: absolute;
+        inset: 0;
+        padding: 160px 70px 90px 70px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+
+      .scene-wrapper {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      /* Typography Helpers */
+      .font-display {
+        font-family: 'Instrument Serif', serif;
+      }
+      .font-mono {
+        font-family: 'JetBrains Mono', monospace;
+      }
+      .font-body {
+        font-family: 'Inter', sans-serif;
+      }
+
+      /* Scene 1: Hero */
+      .hero-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .hero-title {
+        font-size: 108px;
+        line-height: 1.02;
+        color: #1c1c2e;
+        margin-bottom: 40px;
+      }
+      .hero-title span.italic {
+        font-style: italic;
+        color: #c5881b;
+      }
+      .hero-subtitle {
+        font-size: 34px;
+        color: #444444;
+        line-height: 1.5;
+        font-weight: 300;
+        max-width: 880px;
+      }
+      .hero-cta-btn {
+        margin-top: 60px;
+        display: inline-flex;
+        align-items: center;
+        gap: 20px;
+        padding: 28px 56px;
+        background-color: #1c1c2e;
+        color: #ffffff;
+        font-size: 32px;
+        font-weight: 600;
+        border-radius: 100px;
+        box-shadow: 0 16px 40px rgba(28, 28, 46, 0.25);
+      }
+
+      /* Scene 2: Services */
+      .section-tag {
+        font-size: 22px;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: #555555;
+        margin-bottom: 16px;
+      }
+      .section-heading {
+        font-size: 90px;
+        line-height: 1.05;
+        margin-bottom: 44px;
+      }
+      .services-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .service-card {
+        padding: 36px;
+        background: #ffffff;
+        border: 2px solid rgba(28, 28, 46, 0.1);
+        border-radius: 32px;
+        display: flex;
+        align-items: flex-start;
+        gap: 28px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+      }
+      .service-num {
+        font-size: 28px;
+        color: #1c1c2e;
+        font-weight: 700;
+      }
+      .service-info h3 {
+        font-size: 40px;
+        margin-bottom: 10px;
+      }
+      .service-info p {
+        font-size: 24px;
+        color: #444444;
+        line-height: 1.4;
+      }
+
+      /* Scene 3: Featured Example Project */
+      .project-card {
+        background-color: #1c1c2e;
+        color: #ffffff;
+        border-radius: 40px;
+        padding: 60px 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 1020px;
+        box-shadow: 0 30px 70px rgba(28, 28, 46, 0.3);
+      }
+      .project-badge {
+        font-size: 22px;
+        color: #f5b638;
+        letter-spacing: 0.12em;
+        margin-bottom: 20px;
+        font-weight: 600;
+      }
+      .project-title {
+        font-size: 96px;
+        color: #ffffff;
+        margin-bottom: 20px;
+      }
+      .project-desc {
+        font-size: 28px;
+        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.5;
+        margin-bottom: 36px;
+      }
+      .project-img-box {
+        width: 100%;
+        height: 560px;
+        border-radius: 28px;
+        overflow: hidden;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+      }
+      .project-img-box img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Scene 4: Clean CTA Card */
+      .cta-card {
+        background: radial-gradient(100% 100% at 50% 0%, #ffffff 0%, #f8fbff 100%);
+        border: 3px solid #1c1c2e;
+        border-radius: 48px;
+        padding: 90px 60px;
+        text-align: center;
+        box-shadow: 0 40px 90px rgba(28, 28, 46, 0.12);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .cta-tag {
+        font-size: 24px;
+        letter-spacing: 0.15em;
+        color: #c5881b;
+        font-weight: 600;
+        margin-bottom: 24px;
+      }
+      .cta-title {
+        font-size: 100px;
+        line-height: 1.05;
+        margin-bottom: 32px;
+        color: #1c1c2e;
+      }
+      .cta-sub {
+        font-size: 34px;
+        color: #444444;
+        line-height: 1.5;
+        margin-bottom: 60px;
+        max-width: 800px;
+        font-weight: 300;
+      }
+      .cta-main-btn {
+        width: 100%;
+        max-width: 700px;
+        padding: 34px;
+        background-color: #1c1c2e;
+        color: #ffffff;
+        border-radius: 100px;
+        font-size: 36px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+        box-shadow: 0 20px 50px rgba(28, 28, 46, 0.25);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="13.5"
+      data-width="1080"
+      data-height="1920"
+    >
+      <!-- Full-bleed canvas background child -->
+      <div class="canvas-bg"></div>
+
+      <!-- Shared Fixed Header -->
+      <div class="brand-header" data-layout-allow-overlap>
+        <div class="brand-logo">
+          <div class="brand-avatar font-mono">N</div>
+          <span class="brand-name font-mono">nexom.dev</span>
+        </div>
+        <div class="availability-badge font-mono">
+          <span class="pulse-dot"></span>
+          DISPONIBLE
+        </div>
+      </div>
+
+      <!-- Floating Abstract Decorative Shapes -->
+      <div id="shape-amber" class="floating-shape shape-amber-circle"></div>
+      <div id="shape-teal" class="floating-shape shape-teal-sq"></div>
+      <div id="shape-navy" class="floating-shape shape-navy-dot"></div>
+      <div id="shape-ring" class="floating-shape shape-amber-ring"></div>
+
+      <!-- SCENE 1: HOOK & BRAND INTRO (0s - 3.3s) -->
+      <section
+        id="scene-1"
+        class="clip"
+        data-start="0"
+        data-duration="3.3"
+        data-track-index="1"
+      >
+        <div id="s1-wrapper" class="scene-wrapper hero-content">
+          <h1 id="s1-title" class="hero-title font-display">
+            Convierto ideas<br />
+            <span class="italic">complejas</span> en<br />
+            productos <span class="italic">digitales</span>
+          </h1>
+          <p id="s1-sub" class="hero-subtitle font-body">
+            Desarrolladora Frontend & UI/UX Freelance. Interfaces modernas, apps reactivas y sistemas de diseño.
+          </p>
+          <div id="s1-btn" class="hero-cta-btn font-body">
+            Empecemos →
+          </div>
+        </div>
+      </section>
+
+      <!-- SCENE 2: SERVICES SHOWCASE (3.1s - 6.6s) -->
+      <section
+        id="scene-2"
+        class="clip"
+        data-start="3.1"
+        data-duration="3.5"
+        data-track-index="2"
+      >
+        <div id="s2-wrapper" class="scene-wrapper">
+          <span id="s2-tag" class="section-tag font-mono">Lo que hago por ti</span>
+          <h2 id="s2-heading" class="section-heading font-display">
+            Soluciones <span style="font-style: italic; color: #c5881b;">digitales</span> a medida
+          </h2>
+
+          <div class="services-grid">
+            <div id="srv-1" class="service-card">
+              <span class="service-num font-mono">01</span>
+              <div class="service-info">
+                <h3 class="font-display">Desarrollo Web</h3>
+                <p>Aplicaciones rápidas, accesibles con React, TypeScript y Tailwind.</p>
+              </div>
+            </div>
+            <div id="srv-2" class="service-card">
+              <span class="service-num font-mono">02</span>
+              <div class="service-info">
+                <h3 class="font-display">Diseño UI/UX</h3>
+                <p>Interfaces con foco en usabilidad y sistemas de diseño escalables.</p>
+              </div>
+            </div>
+            <div id="srv-3" class="service-card">
+              <span class="service-num font-mono">03</span>
+              <div class="service-info">
+                <h3 class="font-display">Integración de APIs</h3>
+                <p>Conexión con servicios externos y backend ligero en la nube.</p>
+              </div>
+            </div>
+            <div id="srv-4" class="service-card">
+              <span class="service-num font-mono">04</span>
+              <div class="service-info">
+                <h3 class="font-display">Consultoría Técnica</h3>
+                <p>Optimización de performance, arquitectura y roadmaps técnicos.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCENE 3: FEATURED EXAMPLE PROJECT (6.7s - 10.1s) -->
+      <section
+        id="scene-3"
+        class="clip"
+        data-start="6.7"
+        data-duration="3.4"
+        data-track-index="3"
+      >
+        <div id="s3-wrapper" class="scene-wrapper">
+          <div id="s3-card" class="project-card">
+            <div>
+              <div class="project-badge font-mono">✦ PROYECTO DE EJEMPLO · DASHBOARD</div>
+              <h2 class="project-title font-display">Naao.</h2>
+              <p class="project-desc font-body">
+                Aplicación web para la gestión integral de turnos en peluquerías y centros de estética.
+              </p>
+            </div>
+
+            <div class="project-img-box" data-layout-allow-overflow>
+              <img src="./assets/naao_instagram_post.png" alt="Naao Project Preview" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCENE 4: CLEAN FINAL CTA (10.2s - 13.5s) -->
+      <section
+        id="scene-4"
+        class="clip"
+        data-start="10.2"
+        data-duration="3.3"
+        data-track-index="4"
+      >
+        <div id="s4-wrapper" class="scene-wrapper">
+          <div class="cta-card">
+            <span class="cta-tag font-mono">¿LISTO PARA EMPEZAR?</span>
+            <h2 id="s4-title" class="cta-title font-display">
+              Trabajemos <span style="font-style: italic; color: #c5881b;">juntos</span>
+            </h2>
+            <p class="cta-sub font-body">
+              Transformemos tu idea en un producto digital excepcional.
+            </p>
+
+            <div id="s4-btn" class="cta-main-btn font-body">
+              Hablemos hoy ↓
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Ambient Floating Shapes Animation across the composition
+      tl.to("#shape-amber", { y: -60, x: 30, rotation: 15, duration: 7, ease: "sine.inOut", repeat: 1, yoyo: true, transformOrigin: "50% 50%" }, 0);
+      tl.to("#shape-teal", { y: 80, rotation: 45, duration: 6.5, ease: "sine.inOut", repeat: 1, yoyo: true, transformOrigin: "50% 50%" }, 0);
+      tl.to("#shape-navy", { y: -40, x: -20, duration: 5.5, ease: "sine.inOut", repeat: 1, yoyo: true, transformOrigin: "50% 50%" }, 0);
+      tl.to("#shape-ring", { rotation: 180, duration: 9, ease: "none", repeat: 1, transformOrigin: "50% 50%" }, 0);
+
+      // --- SCENE 1 (0s to 3.3s) ---
+      tl.from("#s1-title", { y: 80, opacity: 0, duration: 0.8, ease: "power3.out" }, 0.2);
+      tl.from("#s1-sub", { y: 40, opacity: 0, duration: 0.7, ease: "power3.out" }, 0.5);
+      tl.from("#s1-btn", { scale: 0.8, opacity: 0, duration: 0.6, ease: "back.out(1.7)" }, 0.8);
+      // Scene 1 Exit on wrapper
+      tl.to("#s1-wrapper", { opacity: 0, y: -60, duration: 0.4, ease: "power2.in" }, 2.7);
+      tl.set("#s1-wrapper", { opacity: 0 }, 3.1);
+
+      // --- SCENE 2 (3.1s to 6.6s) ---
+      tl.from("#s2-tag", { y: 30, opacity: 0, duration: 0.5, ease: "power2.out" }, 3.2);
+      tl.from("#s2-heading", { y: 40, opacity: 0, duration: 0.6, ease: "power3.out" }, 3.3);
+      tl.from("#srv-1", { x: -60, opacity: 0, duration: 0.5, ease: "power3.out" }, 3.6);
+      tl.from("#srv-2", { x: 60, opacity: 0, duration: 0.5, ease: "power3.out" }, 3.8);
+      tl.from("#srv-3", { x: -60, opacity: 0, duration: 0.5, ease: "power3.out" }, 4.0);
+      tl.from("#srv-4", { x: 60, opacity: 0, duration: 0.5, ease: "power3.out" }, 4.2);
+      tl.to("#srv-1", { borderColor: "#c5881b", duration: 0.4 }, 4.8);
+      // Scene 2 Exit on wrapper
+      tl.to("#s2-wrapper", { opacity: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 6.2);
+      tl.set("#s2-wrapper", { opacity: 0 }, 6.6);
+
+      // --- SCENE 3 (6.7s to 10.1s) ---
+      tl.from("#s3-card", { y: 100, opacity: 0, duration: 0.8, ease: "power3.out" }, 6.8);
+      tl.from(".project-img-box", { scale: 0.9, opacity: 0, duration: 0.7, ease: "power2.out" }, 7.1);
+      tl.to(".project-img-box img", { scale: 1.08, duration: 2.8, ease: "power1.out" }, 7.2);
+      // Scene 3 Exit on wrapper
+      tl.to("#s3-wrapper", { opacity: 0, y: -80, duration: 0.4, ease: "power2.in" }, 9.7);
+      tl.set("#s3-wrapper", { opacity: 0 }, 10.1);
+
+      // --- SCENE 4: CLEAN FINAL CTA (10.2s to 13.5s) ---
+      tl.from(".cta-card", { scale: 0.85, opacity: 0, duration: 0.7, ease: "back.out(1.4)" }, 10.3);
+      tl.from("#s4-title", { y: 30, opacity: 0, duration: 0.5, ease: "power3.out" }, 10.6);
+      tl.from("#s4-btn", { scale: 0.9, opacity: 0, duration: 0.5, ease: "back.out(1.8)" }, 11.0);
+      tl.to("#s4-btn", { scale: 1.05, duration: 0.6, repeat: 1, yoyo: true, ease: "sine.inOut" }, 11.6);
+
+      // Register main composition timeline
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
